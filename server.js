@@ -1,42 +1,37 @@
 const http = require('http')
 const express = require('express')
+const { NONAME } = require('dns')
 const app = express()
 
 const PORT = 8000
 
-const heavyweightUFC = {
-  champion: {
-    name: 'Jon Jones',
+const mmaFightersDB = {
+  'jon jones': {
     record: {
       wins: 27,
       loses: 1,
-      draw: 0,
       'no contest': 1
     },
-    height: 193,
-    weight: 113
+    nickname: 'bones'
   },
-  1: {
-    name: 'Tom Aspinall',
+  'sergei pavlovich': {
     record: {
-      wins: 14,
-      loses: 3,
-      draw: 0,
-      'no contest': 0
-    },
-    height: 196,
-    weight: 118
-  },
-  2: {
-    name: 'Ciryl Gane',
-    record: {
-      wins: 12,
+      wins: 18,
       loses: 2,
-      draw: 0,
-      'no contest': 0
+    }
+  },
+  'daniel cormier': {
+    record: {
+      wins: 27,
+      loses: 1,
+      draws: 1,
+      'no contest': 1
     },
-    height: 193,
-    weight: 112
+    nickname: 'dc'
+  },
+  'unknown': {
+    record: 'none',
+    nickname: 'unknown'
   }
 }
 
@@ -44,8 +39,15 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/client/index.html')
 })
 
-app.get('/api', (req, res) => {
-  res.json(heavyweightUFC)
+app.get('/api/:name', (req, res) => {
+  const fighter = req.params.name.toLowerCase()
+
+  if (mmaFightersDB[fighter]) {
+    res.json(mmaFightersDB[fighter])
+  } else {
+    res.json(mmaFightersDB['unknown'])
+  }
+  
 })
 
 app.listen(PORT, () => {console.log(`server is running on port ${PORT}...`)})
