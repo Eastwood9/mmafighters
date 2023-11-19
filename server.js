@@ -1,9 +1,10 @@
-const http = require('http')
 const express = require('express')
-const { NONAME } = require('dns')
+const cors = require('cors')
 const app = express()
 
 const PORT = 8000
+
+app.use(cors())
 
 const mmaFightersDB = {
   'jon jones': {
